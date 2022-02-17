@@ -7,6 +7,8 @@ import java.util.List;
 
 public class Main {
 
+    private static final int BIG_DECIMAL_SCALE = 5;
+
     public static void main(String[] args) {
         var returnHistory = List.of(
                 BigDecimal.valueOf(10.2),
@@ -18,28 +20,19 @@ public class Main {
         var riskFreeReturn = BigDecimal.valueOf(10);
         var returnHistoryStandardDeviation = standardDeviation(returnHistory);
         var sharpeRatio = (expectedReturn.subtract(riskFreeReturn))
-                .divide(returnHistoryStandardDeviation, 5, RoundingMode.HALF_EVEN);
-        System.out.println(sharpeRatio);
+                .divide(returnHistoryStandardDeviation, BIG_DECIMAL_SCALE, RoundingMode.HALF_EVEN);
+        System.out.println(expectedReturn + " " + returnHistoryStandardDeviation + " " + sharpeRatio);
     }
 
-    //TODO: cleanup, stream API
     private static BigDecimal mean(List<BigDecimal> m) {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (BigDecimal bigDecimal : m) {
-            sum = sum.add(bigDecimal);
-        }
-        return sum.divide(BigDecimal.valueOf(m.size()), RoundingMode.HALF_EVEN);
+        return m.stream().reduce(BigDecimal.ZERO, BigDecimal::add)
+                .divide(BigDecimal.valueOf(m.size()), BIG_DECIMAL_SCALE, RoundingMode.HALF_EVEN);
     }
 
-    //TODO: cleanup, stream API
     public static BigDecimal standardDeviation(List<BigDecimal> numbers) {
-        var standardDeviation = BigDecimal.ZERO;
         var mean = mean(numbers);
-
-        for (var number: numbers) {
-            standardDeviation = standardDeviation.add(number.subtract(mean).pow(2));
-        }
-
-        return standardDeviation.divide(BigDecimal.valueOf(numbers.size()).sqrt(new MathContext(5)), RoundingMode.HALF_EVEN);
+        return numbers.stream().reduce(BigDecimal.ZERO, (a, b) -> a.add(b.subtract(mean).pow(2)))
+                .divide(BigDecimal.valueOf(numbers.size()), BIG_DECIMAL_SCALE, RoundingMode.HALF_EVEN)
+                .sqrt(new MathContext(BIG_DECIMAL_SCALE));
     }
 }
