@@ -1,4 +1,4 @@
-package com.github.akhuntsaria.hadoopfinancialanalysis;
+package com.github.akhuntsaria.distributedfinancialanalysis;
 
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
@@ -87,9 +87,6 @@ public class Main {
                     .collect(Collectors.toList());
         } catch (Exception e) {
             System.err.printf("Could not load data for %s\n", stockSymbol);
-
-            // Uncomment to debug
-            //e.printStackTrace();
 
             return Optional.empty();
         }
