@@ -115,7 +115,7 @@ public class Main {
     }
 
     private static Optional<Calendar> toCalendar() {
-        System.out.print("Enter to date (2016/01/01): ");
+        System.out.print("Enter to date (): ");
         String date = new Scanner(System.in).nextLine();
 
         if (date.isEmpty()) {
