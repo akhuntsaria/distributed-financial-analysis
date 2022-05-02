@@ -14,12 +14,16 @@ public class SharpeRationMapper extends Mapper<Object, Text, Text, Text> {
     // Same output key for all entries because we need to find a maximum value later
     private static final Text KEY_OUT = new Text("key");
 
+    private static final Text VALUE_OUT = new Text();
+
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         var jobInputEntry = new JobInputEntry(value.toString());
         var sharpeRatio = SharpeRatioUtil.calculate(jobInputEntry);
 
         logger.info("Mapped job entry {} to {}", jobInputEntry, sharpeRatio);
 
-        context.write(KEY_OUT, new Text(jobInputEntry.getStockSymbol() + "," + sharpeRatio));
+        VALUE_OUT.set(jobInputEntry.getStockSymbol() + "," + sharpeRatio);
+
+        context.write(KEY_OUT, VALUE_OUT);
     }
 }

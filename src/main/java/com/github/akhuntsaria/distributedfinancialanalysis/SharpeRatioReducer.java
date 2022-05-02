@@ -8,9 +8,12 @@ import java.math.BigDecimal;
 
 public class SharpeRatioReducer extends Reducer<Text, Text, Text, Text> {
 
-    //TODO: optimize, handle errors
-    public void reduce(Text key, Iterable<Text> values, Context context)
-            throws IOException, InterruptedException {
+    private static final Text KEY_OUT = new Text();
+
+    private static final Text VALUE_OUT = new Text();
+
+    //TODO: handle errors
+    public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
         String maxRationStockSymbol = null;
         BigDecimal maxRatio = null;
 
@@ -25,7 +28,9 @@ public class SharpeRatioReducer extends Reducer<Text, Text, Text, Text> {
         }
 
         if (maxRatio != null) {
-            context.write(new Text(maxRationStockSymbol), new Text(maxRatio.toString()));
+            KEY_OUT.set(maxRationStockSymbol);
+            VALUE_OUT.set(maxRatio.toString());
+            context.write(KEY_OUT, VALUE_OUT);
         }
     }
 }
