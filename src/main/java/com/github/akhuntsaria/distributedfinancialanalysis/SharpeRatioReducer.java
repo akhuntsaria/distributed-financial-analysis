@@ -1,34 +1,34 @@
 package com.github.akhuntsaria.distributedfinancialanalysis;
 
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class SharpeRatioReducer extends Reducer<Text, Text, Text, Text> {
-
-    private static final String VALUE_IN_SEPARATOR = ",";
+public class SharpeRatioReducer extends Reducer<Text, TextArrayWritable, Text, Text> {
 
     private static final Text KEY_OUT = new Text();
 
     private static final Text VALUE_OUT = new Text();
 
-    public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+    public void reduce(Text key, Iterable<TextArrayWritable> values, Context context)
+            throws IOException, InterruptedException {
+
         String maxRatioStockSymbol = null;
         BigDecimal maxRatio = null;
 
-        for (Text value : values) {
-            String[] valueParts = value.toString().split(VALUE_IN_SEPARATOR);
-            if (valueParts.length != 2) {
-                throw new IllegalArgumentException(String.format("Invalid reducer value \"%s\". " +
-                        "Example of a correct value: MSFT,0.8", value));
+        for (TextArrayWritable value : values) {
+            Writable[] valueArray = value.get();
+            if (valueArray.length != 2) {
+                throw new IllegalArgumentException("Stock symbol and ratio are required in reducer");
             }
 
-            BigDecimal ratio = new BigDecimal(valueParts[1]);
+            BigDecimal ratio = new BigDecimal(valueArray[1].toString());
 
             if (maxRatio == null || ratio.compareTo(maxRatio) > 0) {
-                maxRatioStockSymbol = valueParts[0];
+                maxRatioStockSymbol = valueArray[0].toString();
                 maxRatio = ratio;
             }
         }

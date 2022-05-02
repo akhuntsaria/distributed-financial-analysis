@@ -14,11 +14,15 @@ public class Application {
     public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "Maximum sharpe ratio");
+
         job.setJarByClass(Application.class);
         job.setMapperClass(SharpeRationMapper.class);
         job.setReducerClass(SharpeRatioReducer.class);
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(TextArrayWritable.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
+
         setInputAndOutputPaths(job, args);
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }
