@@ -16,7 +16,7 @@ public class Application {
         Job job = Job.getInstance(conf, "Maximum sharpe ratio");
 
         job.setJarByClass(Application.class);
-        job.setMapperClass(SharpeRationMapper.class);
+        job.setMapperClass(SharpeRatioMapper.class);
         job.setReducerClass(SharpeRatioReducer.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(TextArrayWritable.class);

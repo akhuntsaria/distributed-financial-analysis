@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class SharpeRationMapper extends Mapper<Object, Text, Text, ArrayWritable> {
+public class SharpeRatioMapper extends Mapper<Object, Text, Text, ArrayWritable> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SharpeRationMapper.class);
+    private static final Logger logger = LoggerFactory.getLogger(SharpeRatioMapper.class);
 
     // Same output key for all entries because we need to find a maximum value later
     private static final Text KEY_OUT = new Text("key");
