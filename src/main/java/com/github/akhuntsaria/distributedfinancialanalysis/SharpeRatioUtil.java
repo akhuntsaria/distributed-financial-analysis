@@ -27,12 +27,12 @@ public class SharpeRatioUtil {
                 .divide(standardDeviation(returnHistory, mean), BIG_DECIMAL_SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private static BigDecimal mean(List<BigDecimal> numbers) {
+    public static BigDecimal mean(List<BigDecimal> numbers) {
         return numbers.stream().reduce(BigDecimal.ZERO, BigDecimal::add)
                 .divide(BigDecimal.valueOf(numbers.size()), BIG_DECIMAL_SCALE, RoundingMode.HALF_EVEN);
     }
 
-    private static List<BigDecimal> returnHistory(JobInputEntry jobInputEntry) {
+    public static List<BigDecimal> returnHistory(JobInputEntry jobInputEntry) {
         try {
             Optional<Stock> stock = Optional.ofNullable(
                     YahooFinance.get(
@@ -56,7 +56,7 @@ public class SharpeRatioUtil {
         }
     }
 
-    private static BigDecimal standardDeviation(List<BigDecimal> numbers, BigDecimal mean) {
+    public static BigDecimal standardDeviation(List<BigDecimal> numbers, BigDecimal mean) {
         return numbers.stream().reduce(BigDecimal.ZERO, (a, b) -> a.add(b.subtract(mean).pow(2)))
                 .divide(BigDecimal.valueOf(numbers.size()), BIG_DECIMAL_SCALE, RoundingMode.HALF_EVEN)
                 .sqrt(new MathContext(BIG_DECIMAL_SCALE));

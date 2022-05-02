@@ -21,4 +21,4 @@ Each line in input files has to have a format `SYMBOL,FROM_DATE,TO_DATE`. Exampl
 Output file will contain one line with stock symbol and corresponding maximum sharpe ratio. Example can be found in the default output directory.
 
 # TODO
-* Tests
+* Higher test coverage
